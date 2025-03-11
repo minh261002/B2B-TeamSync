@@ -1,17 +1,8 @@
-const UserStatus = {
-  ACTIVE: 'active',
-  INACTIVE: 'inactive',
-  BLOCK: 'block',
-};
-
-const UserRole = {
-  AGENT: 'agent',
-  USER: 'user',
+export const Provider = {
+  GOOGLE: "google",
+  FACEBOOK: "facebook",
+  GITHUB: "github",
+  EMAIL: "email",
 }
 
-const ActiveStatus = {
-  ACTIVE: 'active',
-  INACTIVE: 'inactive',
-}
-
-export { UserStatus, UserRole,  ActiveStatus };
+export type ProviderType = keyof typeof Provider;
