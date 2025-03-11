@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "seed": "ts-node-dev src/seeders/role.seeder.ts",
     "dev": "npx nodemon",
     "build": "rimraf ./dist && tsc && tsc-alias",
     "start": "node dist/index.js",

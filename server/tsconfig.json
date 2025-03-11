@@ -107,9 +107,6 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true ,                                /* Skip type checking all .d.ts files. */
-    "paths": {
-      "~/*": ["src/*"] // Đường dẫn tương đối cho các import (alias)
-    },
   },
   "files": ["src/type.d.ts"], // Các file dùng để defined global type cho dự án
   "include": ["src/**/*"]

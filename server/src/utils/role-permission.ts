@@ -1,9 +1,4 @@
-import {
-  Roles,
-  Permissions,
-  RolesType,
-  PermissionsType,
-} from "~/constants/enum";
+import { Roles, Permissions, RolesType, PermissionsType } from '../constants/enum'
 
 export const RolePermissions: Record<RolesType, Array<PermissionsType>> = {
   OWNER: [
@@ -24,7 +19,7 @@ export const RolePermissions: Record<RolesType, Array<PermissionsType>> = {
     Permissions.UPDATE_TASK,
     Permissions.DELETE_TASK,
 
-    Permissions.VIEW_ONLY,
+    Permissions.VIEW_ONLY
   ],
   ADMIN: [
     Permissions.ADD_MEMBER,
@@ -35,11 +30,7 @@ export const RolePermissions: Record<RolesType, Array<PermissionsType>> = {
     Permissions.UPDATE_TASK,
     Permissions.DELETE_TASK,
     Permissions.MANAGE_WORKSPACE_SETTINGS,
-    Permissions.VIEW_ONLY,
+    Permissions.VIEW_ONLY
   ],
-  MEMBER: [
-    Permissions.VIEW_ONLY,
-    Permissions.CREATE_TASK,
-    Permissions.UPDATE_TASK,
-  ],
-};
+  MEMBER: [Permissions.VIEW_ONLY, Permissions.CREATE_TASK, Permissions.UPDATE_TASK]
+}
