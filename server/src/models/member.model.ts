@@ -1,12 +1,11 @@
 import mongoose, {Document, Schema} from "mongoose";
+import { RoleDocument } from "./role.model";
 
 export interface MemberDocument extends Document {
   userId: mongoose.Types.ObjectId;
   workspaceId: mongoose.Types.ObjectId;
   joinedAt: Date;
-  // role: string;
-  createdAt: Date;
-  updatedAt: Date;
+  role: RoleDocument;
 }
 
 const MemberSchema = new Schema<MemberDocument>({
@@ -18,6 +17,11 @@ const MemberSchema = new Schema<MemberDocument>({
   workspaceId: {
     type: Schema.Types.ObjectId,
     ref: "Workspace",
+    required: true,
+  },
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: "Role",
     required: true,
   },
   joinedAt: {
