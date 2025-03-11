@@ -71,3 +71,5 @@ export const HttpStatus = {
   NOT_EXTENDED: 510,
   NETWORK_AUTHENTICATION_REQUIRED: 511,
 };
+
+export type HttpStatusType = typeof HttpStatus[keyof typeof HttpStatus];
