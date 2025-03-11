@@ -72,4 +72,4 @@ export const HttpStatus = {
   NETWORK_AUTHENTICATION_REQUIRED: 511,
 };
 
-export type HttpStatusType = typeof HttpStatus[keyof typeof HttpStatus];
+export type HttpStatusType = (typeof HttpStatus)[keyof typeof HttpStatus];

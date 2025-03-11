@@ -78,3 +78,5 @@ export const Messages = {
   WELCOME: "Chào mừng bạn đến với hệ thống.",
   GOODBYE: "Hẹn gặp lại bạn.",
 };
+
+export type MessagesType = (typeof Messages)[keyof typeof Messages];
