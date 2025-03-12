@@ -9,6 +9,7 @@ import authRouter from "./routes/auth.routes";
 import passport from "./configs/passport.config";
 import userRouter from "./routes/user.routes";
 import isAuthenticated from "./middlewares/isAuthenticated.middleware";
+import workspaceRouter from "./routes/workspace.routes";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -43,6 +44,7 @@ app.use(
 
 app.use(`${BASE_PATH}/auth`, authRouter);
 app.use(`${BASE_PATH}/user`, isAuthenticated, userRouter);
+app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRouter);
 
 app.use(errorHandler);
 
