@@ -64,13 +64,13 @@ export const logoutUserController = asyncHandler(async (req: Request, res: Respo
       });
     }
 
-    req.session.destroy((err) => {
+    req.session?.destroy((err) => {
       if (err) {
         return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           message: Messages.SERVER_ERROR
         });
       }
-
+      res.clearCookie("session");
       return res.status(HttpStatus.OK).json({
         message: Messages.LOGOUT_SUCCESS
       });
