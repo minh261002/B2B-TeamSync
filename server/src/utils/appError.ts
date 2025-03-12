@@ -3,12 +3,12 @@ import { MessagesType, Messages } from "../constants/message";
 
 export class AppError extends Error {
   public statusCode: HttpStatusType | number;
-  public errorCode?: MessagesType;
+  public errorCode?: HttpStatusType;
 
   constructor(message: string, statusCode = HttpStatus.INTERNAL_SERVER_ERROR, errorCode?: MessagesType) {
     super(message);
     this.statusCode = statusCode;
-    this.errorCode = errorCode;
+    this.errorCode = statusCode;
     Error.captureStackTrace(this, this.constructor);
   }
 }
