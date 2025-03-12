@@ -3,7 +3,8 @@ import {
   createWorkspaceController,
   getAllWorkspaceUserIsMemberOfController,
   getWorkspaceByIdController,
-  getMembersByWorkspaceIdController
+  getMembersByWorkspaceIdController,
+  getWorkspaceAnalyticsController
 } from "src/controllers/workspace.controller";
 
 const workspaceRouter = Router();
@@ -11,6 +12,7 @@ const workspaceRouter = Router();
 workspaceRouter.post("/create/new", createWorkspaceController);
 workspaceRouter.get("/all", getAllWorkspaceUserIsMemberOfController);
 workspaceRouter.get("/:id", getWorkspaceByIdController);
-workspaceRouter.get("/:id/member", getMembersByWorkspaceIdController);
+workspaceRouter.get("/:id/members", getMembersByWorkspaceIdController);
+workspaceRouter.get("/:id/analytics", getWorkspaceAnalyticsController);
 
 export default workspaceRouter;

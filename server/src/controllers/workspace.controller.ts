@@ -6,7 +6,8 @@ import {
   createWorkspaceService,
   getAllWorkspaceUserIsMemberOfService,
   getMembersByWorkspaceIdService,
-  getWorkspaceByIdService
+  getWorkspaceByIdService,
+  getWorkspaceAnalyticsService
 } from "../services/workspace.service";
 import { createWorkspaceSchema, workspaceIdSchema } from "../validations/workspace.validation";
 import { roleGuard } from "../utils/roleGuard";
@@ -61,5 +62,18 @@ export const getMembersByWorkspaceIdController = asyncHandler(async (req, res) =
     message: Messages.SUCCESS,
     members,
     roles
+  });
+});
+
+export const getWorkspaceAnalyticsController = asyncHandler(async (req, res) => {
+  const workspaceId = workspaceIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+  const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
+
+  const { analytics } = await getWorkspaceAnalyticsService(workspaceId);
+
+  return res.status(HttpStatus.OK).json({
+    message: Messages.SUCCESS,
+    analytics
   });
 });

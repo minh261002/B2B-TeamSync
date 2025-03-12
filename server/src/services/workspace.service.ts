@@ -2,10 +2,11 @@ import UserModel from "../models/user.model";
 import { NotFoundException } from "../utils/appError";
 import { Messages } from "../constants/message";
 import RoleModel from "../models/role.model";
-import { Roles } from "../constants/enum";
+import { Roles, TaskStatus } from "../constants/enum";
 import WorkspaceModel from "src/models/workspace.model";
 import MemberModel from "src/models/member.model";
 import mongoose from "mongoose";
+import TaskModel from "src/models/task.model";
 
 export const createWorkspaceService = async (
   userId: string,
@@ -79,4 +80,29 @@ export const getMembersByWorkspaceIdService = async (workspaceId: string) => {
   const roles = await RoleModel.find({}, { name: 1, _id: 1 }).select("-permission").lean();
 
   return { members, roles };
+};
+
+export const getWorkspaceAnalyticsService = async (workspaceId: string) => {
+  const currentDate = new Date();
+
+  const totalTasks = await TaskModel.countDocuments({ workspace: workspaceId });
+
+  const overdueTasks = await TaskModel.countDocuments({
+    workspace: workspaceId,
+    dueDate: { $lt: currentDate },
+    status: { $ne: TaskStatus.DONE }
+  });
+
+  const completedTasks = await TaskModel.countDocuments({
+    workspace: workspaceId,
+    status: TaskStatus.DONE
+  });
+
+  const analytics = {
+    totalTasks,
+    overdueTasks,
+    completedTasks
+  };
+
+  return { analytics };
 };
