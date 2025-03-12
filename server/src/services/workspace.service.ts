@@ -47,3 +47,26 @@ export const createWorkspaceService = async (
 
   return { workspace };
 };
+
+export const getAllWorkspaceUserIsMemberOfService = async (userId: string) => {
+  const memberships = await MemberModel.find({ userId: userId }).populate("workspaceId").select("-password").exec();
+  const workspaces = memberships.map((member) => member.workspaceId);
+
+  return { workspaces };
+};
+
+export const getWorkspaceByIdService = async (workspaceId: string) => {
+  const workspace = await WorkspaceModel.findById(workspaceId);
+  if (!workspace) {
+    throw new NotFoundException(Messages.NOT_FOUND);
+  }
+
+  const member = await MemberModel.find({ workspaceId }).populate("role");
+
+  const workspaceWithMember = {
+    ...workspace.toObject(),
+    members: member
+  };
+
+  return { workspace: workspaceWithMember };
+};
