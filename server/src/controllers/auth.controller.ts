@@ -55,3 +55,25 @@ export const loginUserController = asyncHandler(async (req: Request, res: Respon
     }
   )(req, res, next);
 });
+
+export const logoutUserController = asyncHandler(async (req: Request, res: Response) => {
+  req.logOut((err) => {
+    if (err) {
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        message: Messages.SERVER_ERROR
+      });
+    }
+
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          message: Messages.SERVER_ERROR
+        });
+      }
+
+      return res.status(HttpStatus.OK).json({
+        message: Messages.LOGOUT_SUCCESS
+      });
+    });
+  });
+});
