@@ -1,13 +1,13 @@
-import mongoose, { Document, Schema } from 'mongoose'
-import { generateInviteCode } from '../utils/uuid'
+import mongoose, { Document, Schema } from "mongoose";
+import { generateInviteCode } from "../utils/uuid";
 
 export interface WorkspaceDocument extends Document {
-  name: string
-  description: string
-  owner: mongoose.Types.ObjectId
-  inviteCode: string
-  createdAt: Date
-  updatedAt: Date
+  name: string;
+  description: string;
+  owner: mongoose.Types.ObjectId;
+  inviteCode: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const workspaceSchema = new Schema<WorkspaceDocument>(
@@ -23,7 +23,7 @@ const workspaceSchema = new Schema<WorkspaceDocument>(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true
     },
     inviteCode: {
@@ -34,11 +34,11 @@ const workspaceSchema = new Schema<WorkspaceDocument>(
     }
   },
   { timestamps: true }
-)
+);
 
 workspaceSchema.methods.resetInviteCode = function () {
-  this.inviteCode = generateInviteCode()
-}
+  this.inviteCode = generateInviteCode();
+};
 
-const WorkspaceModel = mongoose.model<WorkspaceDocument>('Workspace', workspaceSchema)
-export default WorkspaceModel
+const WorkspaceModel = mongoose.model<WorkspaceDocument>("Workspace", workspaceSchema);
+export default WorkspaceModel;

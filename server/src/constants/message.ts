@@ -46,7 +46,7 @@ export const Messages = {
   ACCOUNT_NOT_FOUND: "Không tìm thấy tài khoản.",
   ACCOUNT_CREATED: "Tài khoản đã được tạo.",
   ACCOUNT_UPDATED: "Tài khoản đã được cập nhật.",
-
+  INVALID_CREDENTIALS: "Thông tin đăng nhập không chính xác.",
   // Validation messages
   INVALID_INPUT: "Dữ liệu nhập không hợp lệ.",
   REQUIRED_FIELDS_MISSING: "Vui lòng điền đầy đủ các trường bắt buộc.",
@@ -76,7 +76,7 @@ export const Messages = {
 
   // Custom user feedback
   WELCOME: "Chào mừng bạn đến với hệ thống.",
-  GOODBYE: "Hẹn gặp lại bạn.",
+  GOODBYE: "Hẹn gặp lại bạn."
 };
 
 export type MessagesType = (typeof Messages)[keyof typeof Messages];

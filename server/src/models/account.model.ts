@@ -1,14 +1,14 @@
-import mongoose, { Document, Schema } from 'mongoose'
-import { ProviderType, Provider } from '../constants/enum'
+import mongoose, { Document, Schema } from "mongoose";
+import { ProviderType, Provider } from "../constants/enum";
 
 export interface AccountDocument extends Document {
-  provider: ProviderType
-  providerId: string
-  userId: mongoose.Types.ObjectId
-  refreshToken: string | null
-  tokenExpiry: Date | null
-  createdAt: Date
-  updatedAt: Date
+  provider: ProviderType;
+  providerId: string;
+  userId: mongoose.Types.ObjectId;
+  refreshToken: string | null;
+  tokenExpiry: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const accountSchema = new Schema<AccountDocument>(
@@ -24,7 +24,7 @@ const accountSchema = new Schema<AccountDocument>(
     },
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true
     },
     refreshToken: {
@@ -40,11 +40,11 @@ const accountSchema = new Schema<AccountDocument>(
     timestamps: true,
     toJSON: {
       transform(doc, ret) {
-        delete ret.res
+        delete ret.res;
       }
     }
   }
-)
+);
 
-const AccountModel = mongoose.model<AccountDocument>('Account', accountSchema)
-export default AccountModel
+const AccountModel = mongoose.model<AccountDocument>("Account", accountSchema);
+export default AccountModel;
