@@ -7,6 +7,7 @@ import connectDatabase from "./configs/database.config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import authRouter from "./routes/auth.routes";
 import passport from "./configs/passport.config";
+import userRouter from "./routes/user.routes";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -40,6 +41,7 @@ app.use(
 );
 
 app.use(`${BASE_PATH}/auth`, authRouter);
+app.use(`${BASE_PATH}/user`, userRouter);
 
 app.use(errorHandler);
 

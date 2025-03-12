@@ -29,7 +29,8 @@ export const loginOrCreateAccountService = async (data: {
       user = new UserModel({
         email,
         name: displayName,
-        profilePicture: picture || null
+        profilePicture: picture || null,
+        lastLogin: new Date()
       });
       await user.save({ session });
 
@@ -163,6 +164,9 @@ export const verifyUserService = async ({
   if (!user) {
     throw new NotFoundException(Messages.ACCOUNT_NOT_FOUND);
   }
+
+  user.lastLogin = new Date();
+  await user.save();
 
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
