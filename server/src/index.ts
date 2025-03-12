@@ -1,11 +1,12 @@
 import "dotenv/config";
 import express from "express";
-import type { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import session from "cookie-session";
 import { config } from "./configs/app.config";
 import connectDatabase from "./configs/database.config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
+import authRouter from "./routes/auth.routes";
+import passport from "./configs/passport.config";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -24,6 +25,9 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(
   cors({
     origin: config.FRONTEND_URL,
@@ -31,9 +35,7 @@ app.use(
   })
 );
 
-app.use(`${BASE_PATH}`, (req: Request, res: Response, next: NextFunction) => {
-  res.send("Hello World");
-});
+app.use(`${BASE_PATH}/auth`, authRouter);
 
 app.use(errorHandler);
 

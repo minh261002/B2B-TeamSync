@@ -18,8 +18,6 @@ passport.use(
     async (req: Request, accessToken, refreshToken, profile, done) => {
       try {
         const { email, sub: googleId, picture } = profile._json;
-        console.log(profile, "profile");
-        console.log(googleId, "googleId");
         if (!googleId) {
           throw new NotFoundException("Google ID (sub) is missing");
         }
@@ -41,3 +39,5 @@ passport.use(
 
 passport.serializeUser((user: any, done) => done(null, user));
 passport.deserializeUser((user: any, done) => done(null, user));
+
+export default passport;
