@@ -1,4 +1,3 @@
-import { cp } from "fs";
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
 import { NextFunction, Request, Response } from "express";
 import { HttpStatus } from "../constants/httpStatus";
