@@ -1,5 +1,5 @@
 import ProjectModel from "../models/project.model";
-import { NotFoundException } from "../utils/appError";
+import { BadRequestException, NotFoundException } from "../utils/appError";
 import { Messages } from "../constants/message";
 import MemberModel from "../models/member.model";
 import TaskModel from "../models/task.model";
@@ -46,4 +46,42 @@ export const createTaskService = async (
   await task.save();
 
   return { task };
+};
+
+export const updateTaskService = async (
+  workspaceId: string,
+  projectId: string,
+  taskId: string,
+  userId: string,
+  body: {
+    title?: string;
+    description?: string;
+    priority?: string;
+    status?: string;
+    assignedTo?: string | null;
+    dueDate?: string;
+  }
+) => {
+  const project = await ProjectModel.findById(projectId);
+  if (!project || project.workspace.toString() !== workspaceId) {
+    throw new NotFoundException(Messages.NOT_FOUND);
+  }
+
+  const task = await TaskModel.findById(taskId);
+  if (!task || task.project.toString() !== projectId) {
+    throw new NotFoundException(Messages.NOT_FOUND);
+  }
+
+  const updateTask = await TaskModel.findByIdAndUpdate(
+    taskId,
+    {
+      ...body
+    },
+    { new: true }
+  );
+  if (!updateTask) {
+    throw new BadRequestException(Messages.INVALID_INPUT);
+  }
+
+  return { task: updateTask };
 };
