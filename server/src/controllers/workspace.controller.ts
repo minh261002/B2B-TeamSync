@@ -7,9 +7,10 @@ import {
   getAllWorkspaceUserIsMemberOfService,
   getMembersByWorkspaceIdService,
   getWorkspaceByIdService,
-  getWorkspaceAnalyticsService
+  getWorkspaceAnalyticsService,
+  changeMemberRoleInWorkspaceService
 } from "../services/workspace.service";
-import { createWorkspaceSchema, workspaceIdSchema } from "../validations/workspace.validation";
+import { changeRoleSchema, createWorkspaceSchema, workspaceIdSchema } from "../validations/workspace.validation";
 import { roleGuard } from "../utils/roleGuard";
 import { Permissions } from "../constants/enum";
 
@@ -70,10 +71,24 @@ export const getWorkspaceAnalyticsController = asyncHandler(async (req, res) => 
   const userId = req.user?._id;
   const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
 
+  roleGuard(role, [Permissions.VIEW_ONLY]);
   const { analytics } = await getWorkspaceAnalyticsService(workspaceId);
 
   return res.status(HttpStatus.OK).json({
     message: Messages.SUCCESS,
     analytics
+  });
+});
+
+export const changeMemberRoleInWorkspaceController = asyncHandler(async (req, res) => {
+  const workspaceId = workspaceIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+  const { memberId, roleId } = changeRoleSchema.parse(req.body);
+
+  const { member } = await changeMemberRoleInWorkspaceService(workspaceId, memberId, roleId);
+
+  return res.status(HttpStatus.OK).json({
+    message: Messages.UPDATED,
+    member
   });
 });

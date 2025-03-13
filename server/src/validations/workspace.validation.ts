@@ -13,3 +13,8 @@ export const updateWorkspaceSchema = z.object({
   name: nameSchema,
   description: descSchema
 });
+
+export const changeRoleSchema = z.object({
+  roleId: z.string().trim().min(1, { message: "Id không được để trống" }),
+  memberId: z.string().trim().min(1, { message: "Role không được để trống" })
+});
