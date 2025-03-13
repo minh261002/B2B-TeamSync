@@ -108,6 +108,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "files": ["src/type.d.ts"], // Các file dùng để defined global type cho dự án
+  "files": ["src/@types/index.d.ts"], // Các file dùng để defined global type cho dự án
   "include": ["src/**/*"]
 }

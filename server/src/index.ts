@@ -12,6 +12,7 @@ import isAuthenticated from "./middlewares/isAuthenticated.middleware";
 import workspaceRouter from "./routes/workspace.routes";
 import { setupSwagger } from "./configs/idoc.config";
 import memberRouter from "./routes/member.routes";
+import projectRouter from "./routes/project.routes";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -48,6 +49,7 @@ app.use(`${BASE_PATH}/auth`, authRouter);
 app.use(`${BASE_PATH}/user`, isAuthenticated, userRouter);
 app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRouter);
 app.use(`${BASE_PATH}/member`, isAuthenticated, memberRouter);
+app.use(`${BASE_PATH}/project`, isAuthenticated, projectRouter);
 
 setupSwagger(app);
 app.use(errorHandler);
