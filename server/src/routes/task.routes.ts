@@ -3,7 +3,8 @@ import {
   createTaskController,
   updateTaskController,
   getAllTasksController,
-  getTaskByIdController
+  getTaskByIdController,
+  deleteTaskController
 } from "../controllers/task.controller";
 
 const taskRouter = Router();
@@ -14,5 +15,7 @@ taskRouter.put("/:id/project/:projectId/workspace/:workspaceId/update", updateTa
 
 taskRouter.get("/workspace/:workspaceId/all", getAllTasksController);
 taskRouter.get("/:id/project/:projectId/workspace/:workspaceId", getTaskByIdController);
+
+taskRouter.delete("/:id/workspace/:workspaceId/delete", deleteTaskController);
 
 export default taskRouter;
