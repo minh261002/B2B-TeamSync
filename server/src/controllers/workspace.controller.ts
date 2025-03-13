@@ -8,9 +8,15 @@ import {
   getMembersByWorkspaceIdService,
   getWorkspaceByIdService,
   getWorkspaceAnalyticsService,
-  changeMemberRoleInWorkspaceService
+  changeMemberRoleInWorkspaceService,
+  updateWorkspaceByIdService
 } from "../services/workspace.service";
-import { changeRoleSchema, createWorkspaceSchema, workspaceIdSchema } from "../validations/workspace.validation";
+import {
+  changeRoleSchema,
+  createWorkspaceSchema,
+  updateWorkspaceSchema,
+  workspaceIdSchema
+} from "../validations/workspace.validation";
 import { roleGuard } from "../utils/roleGuard";
 import { Permissions } from "../constants/enum";
 
@@ -90,5 +96,21 @@ export const changeMemberRoleInWorkspaceController = asyncHandler(async (req, re
   return res.status(HttpStatus.OK).json({
     message: Messages.UPDATED,
     member
+  });
+});
+
+export const updateWorkspaceByIdController = asyncHandler(async (req, res) => {
+  const { name, description } = updateWorkspaceSchema.parse(req.body);
+  const workspaceId = workspaceIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+
+  const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
+  roleGuard(role, [Permissions.UPDATE_WORKSPACE]);
+
+  const { workspace } = await updateWorkspaceByIdService(workspaceId, name, description);
+
+  return res.status(HttpStatus.OK).json({
+    message: Messages.UPDATED,
+    workspace
   });
 });

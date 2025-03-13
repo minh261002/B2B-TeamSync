@@ -5,7 +5,8 @@ import {
   getWorkspaceByIdController,
   getMembersByWorkspaceIdController,
   getWorkspaceAnalyticsController,
-  changeMemberRoleInWorkspaceController
+  changeMemberRoleInWorkspaceController,
+  updateWorkspaceByIdController
 } from "src/controllers/workspace.controller";
 
 const workspaceRouter = Router();
@@ -15,5 +16,6 @@ workspaceRouter.get("/all", getAllWorkspaceUserIsMemberOfController);
 workspaceRouter.get("/:id", getWorkspaceByIdController);
 workspaceRouter.get("/:id/members", getMembersByWorkspaceIdController);
 workspaceRouter.get("/:id/analytics", getWorkspaceAnalyticsController);
-workspaceRouter.get("/:id/change/member/role", changeMemberRoleInWorkspaceController);
+workspaceRouter.put("/:id/change/member/role", changeMemberRoleInWorkspaceController);
+workspaceRouter.put("/:id/update", updateWorkspaceByIdController);
 export default workspaceRouter;
