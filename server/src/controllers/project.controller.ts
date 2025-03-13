@@ -1,11 +1,15 @@
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
 import { Request, Response } from "express";
-import { creayeProjectSchema } from "../validations/project.validation";
+import { creayeProjectSchema, projectIdSchema } from "../validations/project.validation";
 import { workspaceIdSchema } from "../validations/workspace.validation";
 import { getMemberRoleInWorkspaceService } from "../services/member.service";
 import { roleGuard } from "../utils/roleGuard";
 import { Permissions } from "../constants/enum";
-import { createProjectService, getAllProjectInWorkspaceService } from "../services/project.service";
+import {
+  createProjectService,
+  getAllProjectInWorkspaceService,
+  getProjectByIdAndWorkspaceIdService
+} from "../services/project.service";
 import { HttpStatus } from "../constants/httpStatus";
 import { Messages } from "../constants/message";
 
@@ -52,5 +56,21 @@ export const getAllProjectsController = asyncHandler(async (req: Request, res: R
       skip,
       limit: pageSize
     }
+  });
+});
+
+export const getProjectByIdAndWorkspaceIdController = asyncHandler(async (req: Request, res: Response) => {
+  const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
+  const projectId = projectIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+
+  const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
+  roleGuard(role, [Permissions.VIEW_ONLY]);
+
+  const { project } = await getProjectByIdAndWorkspaceIdService(projectId, workspaceId);
+
+  return res.status(HttpStatus.OK).json({
+    message: Messages.SUCCESS,
+    project
   });
 });
