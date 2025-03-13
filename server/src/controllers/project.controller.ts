@@ -8,7 +8,8 @@ import { Permissions } from "../constants/enum";
 import {
   createProjectService,
   getAllProjectInWorkspaceService,
-  getProjectByIdAndWorkspaceIdService
+  getProjectByIdAndWorkspaceIdService,
+  getProjectAnalyticService
 } from "../services/project.service";
 import { HttpStatus } from "../constants/httpStatus";
 import { Messages } from "../constants/message";
@@ -72,5 +73,21 @@ export const getProjectByIdAndWorkspaceIdController = asyncHandler(async (req: R
   return res.status(HttpStatus.OK).json({
     message: Messages.SUCCESS,
     project
+  });
+});
+
+export const getProjectAnalyticsController = asyncHandler(async (req: Request, res: Response) => {
+  const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
+  const projectId = projectIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+
+  const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
+  roleGuard(role, [Permissions.VIEW_ONLY]);
+
+  const { analytics } = await getProjectAnalyticService(projectId, workspaceId);
+
+  return res.status(HttpStatus.OK).json({
+    message: Messages.SUCCESS,
+    analytics
   });
 });
