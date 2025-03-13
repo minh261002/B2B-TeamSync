@@ -3,7 +3,8 @@ import {
   createProjectController,
   getAllProjectsController,
   getProjectByIdAndWorkspaceIdController,
-  getProjectAnalyticsController
+  getProjectAnalyticsController,
+  updateProjectController
 } from "../controllers/project.controller";
 
 const projectRouter = Router();
@@ -14,4 +15,5 @@ projectRouter.get("/workspace/:workspaceId/all", getAllProjectsController);
 projectRouter.get("/:id/workspace/:workspaceId", getProjectByIdAndWorkspaceIdController);
 projectRouter.get("/:id/workspace/:workspaceId/analytics", getProjectAnalyticsController);
 
+projectRouter.put("/:id/workspace/:workspaceId/update", updateProjectController);
 export default projectRouter;

@@ -1,6 +1,6 @@
 import { asyncHandler } from "../middlewares/asyncHandler.middleware";
 import { Request, Response } from "express";
-import { creayeProjectSchema, projectIdSchema } from "../validations/project.validation";
+import { creayeProjectSchema, projectIdSchema, updateProjectSchema } from "../validations/project.validation";
 import { workspaceIdSchema } from "../validations/workspace.validation";
 import { getMemberRoleInWorkspaceService } from "../services/member.service";
 import { roleGuard } from "../utils/roleGuard";
@@ -9,7 +9,8 @@ import {
   createProjectService,
   getAllProjectInWorkspaceService,
   getProjectByIdAndWorkspaceIdService,
-  getProjectAnalyticService
+  getProjectAnalyticService,
+  updateProjectService
 } from "../services/project.service";
 import { HttpStatus } from "../constants/httpStatus";
 import { Messages } from "../constants/message";
@@ -89,5 +90,22 @@ export const getProjectAnalyticsController = asyncHandler(async (req: Request, r
   return res.status(HttpStatus.OK).json({
     message: Messages.SUCCESS,
     analytics
+  });
+});
+
+export const updateProjectController = asyncHandler(async (req: Request, res: Response) => {
+  const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
+  const projectId = projectIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+  const body = updateProjectSchema.parse(req.body);
+
+  const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
+  roleGuard(role, [Permissions.UPDATE_PROJECT]);
+
+  const { project } = await updateProjectService(workspaceId, projectId, body);
+
+  return res.status(HttpStatus.OK).json({
+    message: Messages.SUCCESS,
+    project
   });
 });
