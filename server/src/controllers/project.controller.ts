@@ -10,7 +10,8 @@ import {
   getAllProjectInWorkspaceService,
   getProjectByIdAndWorkspaceIdService,
   getProjectAnalyticService,
-  updateProjectService
+  updateProjectService,
+  deleteProjectService
 } from "../services/project.service";
 import { HttpStatus } from "../constants/httpStatus";
 import { Messages } from "../constants/message";
@@ -107,5 +108,20 @@ export const updateProjectController = asyncHandler(async (req: Request, res: Re
   return res.status(HttpStatus.OK).json({
     message: Messages.SUCCESS,
     project
+  });
+});
+
+export const deleteProjectController = asyncHandler(async (req: Request, res: Response) => {
+  const workspaceId = workspaceIdSchema.parse(req.params.workspaceId);
+  const projectId = projectIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+
+  const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
+  roleGuard(role, [Permissions.DELETE_PROJECT]);
+
+  await deleteProjectService(workspaceId, projectId);
+
+  return res.status(HttpStatus.NO_CONTENT).json({
+    message: Messages.DELETED
   });
 });

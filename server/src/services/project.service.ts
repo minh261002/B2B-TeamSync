@@ -128,3 +128,15 @@ export const updateProjectService = async (
 
   return { project };
 };
+
+export const deleteProjectService = async (workspaceId: string, projectId: string) => {
+  const project = await ProjectModel.findOne({ _id: projectId, workspace: workspaceId });
+  if (!project) {
+    throw new NotFoundException(Messages.NOT_FOUND);
+  }
+
+  await TaskModel.deleteMany({ project: project._id });
+  await project.deleteOne();
+
+  return project;
+};
