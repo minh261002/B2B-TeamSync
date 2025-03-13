@@ -1,5 +1,5 @@
 import UserModel from "../models/user.model";
-import { NotFoundException } from "../utils/appError";
+import { BadRequestException, NotFoundException } from "../utils/appError";
 import { Messages } from "../constants/message";
 import RoleModel from "../models/role.model";
 import { Roles, TaskStatus } from "../constants/enum";
@@ -7,6 +7,7 @@ import WorkspaceModel from "src/models/workspace.model";
 import MemberModel from "src/models/member.model";
 import mongoose from "mongoose";
 import TaskModel from "src/models/task.model";
+import ProjectModel from "src/models/project.model";
 
 export const createWorkspaceService = async (
   userId: string,
@@ -143,4 +144,46 @@ export const updateWorkspaceByIdService = async (workspaceId: string, name: stri
   await workspace.save();
 
   return { workspace };
+};
+
+export const deleteWorkspaceByIdService = async (workspaceId: string, userId: string) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const workspace = await WorkspaceModel.findById(workspaceId).session(session);
+    if (!workspace) {
+      throw new NotFoundException(Messages.NOT_FOUND);
+    }
+
+    if (workspace.owner.toString() !== userId) {
+      throw new BadRequestException(Messages.UNAUTHORIZED);
+    }
+
+    const user = await UserModel.findById(userId).session(session);
+    if (!user) {
+      throw new NotFoundException(Messages.NOT_FOUND);
+    }
+
+    await ProjectModel.deleteMany({ workspace: workspace._id }).session(session);
+    await TaskModel.deleteMany({ workspace: workspace._id }).session(session);
+    await MemberModel.deleteMany({ workspaceId: workspace._id }).session(session);
+
+    if (user?.currentWorkspace?.equals(workspaceId)) {
+      const memberWorkspace = await MemberModel.findOne({ userId: userId }).session(session);
+      user.currentWorkspace = memberWorkspace ? memberWorkspace.workspaceId : null;
+      await user.save();
+    }
+
+    await workspace.deleteOne().session(session);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return { currentWorkspace: user.currentWorkspace };
+  } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
+    throw err;
+  }
 };

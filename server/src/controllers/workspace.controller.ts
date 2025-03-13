@@ -9,7 +9,8 @@ import {
   getWorkspaceByIdService,
   getWorkspaceAnalyticsService,
   changeMemberRoleInWorkspaceService,
-  updateWorkspaceByIdService
+  updateWorkspaceByIdService,
+  deleteWorkspaceByIdService
 } from "../services/workspace.service";
 import {
   changeRoleSchema,
@@ -112,5 +113,20 @@ export const updateWorkspaceByIdController = asyncHandler(async (req, res) => {
   return res.status(HttpStatus.OK).json({
     message: Messages.UPDATED,
     workspace
+  });
+});
+
+export const deleteWorkspaceByIdController = asyncHandler(async (req, res) => {
+  const workspaceId = workspaceIdSchema.parse(req.params.id);
+  const userId = req.user?._id;
+
+  const { role } = await getMemberRoleInWorkspaceService(userId, workspaceId);
+  roleGuard(role, [Permissions.DELETE_WORKSPACE]);
+
+  const { currentWorkspace } = await deleteWorkspaceByIdService(workspaceId, userId);
+
+  return res.status(HttpStatus.OK).json({
+    message: Messages.DELETED,
+    currentWorkspace
   });
 });

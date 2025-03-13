@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { joinWorkspaceController } from "src/controllers/member.controller";
+import { joinWorkspaceController } from "../controllers/member.controller";
 
 const memberRouter = Router();
 
