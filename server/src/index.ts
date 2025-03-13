@@ -7,6 +7,11 @@ import connectDatabase from "./configs/database.config";
 import { errorHandler } from "./middlewares/errorHandler.middleware";
 import authRouter from "./routes/auth.routes";
 import passport from "./configs/passport.config";
+import userRouter from "./routes/user.routes";
+import isAuthenticated from "./middlewares/isAuthenticated.middleware";
+import workspaceRouter from "./routes/workspace.routes";
+import { setupSwagger } from "./configs/idoc.config";
+import memberRouter from "./routes/member.routes";
 
 const app = express();
 const BASE_PATH = config.BASE_PATH;
@@ -40,7 +45,11 @@ app.use(
 );
 
 app.use(`${BASE_PATH}/auth`, authRouter);
+app.use(`${BASE_PATH}/user`, isAuthenticated, userRouter);
+app.use(`${BASE_PATH}/workspace`, isAuthenticated, workspaceRouter);
+app.use(`${BASE_PATH}/member`, isAuthenticated, memberRouter);
 
+setupSwagger(app);
 app.use(errorHandler);
 
 app.listen(config.PORT, async () => {
